@@ -1,0 +1,21 @@
+#!/bin/sh
+
+print_usage() {
+  echo Usage: $(basename "$0") source-volume destination-dir
+}
+
+if [ -z "$(docker images | grep volume-extractor)" ]; then
+  docker build -t volume-extractor -f lib/Dockerfile lib 
+fi
+
+volume_name=$1
+shift
+bind_path=$1
+shift
+
+if [ -z "$volume_name" -o -z "$bind_path" ]; then
+  print_usage
+  exit 1
+fi
+
+docker run --mount "type=volume,src=$volume_name,dst=/volume_mount" --mount "type=bind,src=$bind_path,dst=/bind_mount" --rm volume-extractor /copy-volume
