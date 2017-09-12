@@ -1,2 +1,2 @@
 build:
-	docker build -t volume-extractor -f lib/Dockerfile lib
+	docker build -t dathan/volume-extractor -f lib/Dockerfile lib
